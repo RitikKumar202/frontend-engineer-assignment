@@ -2,11 +2,26 @@
 
 A viewer for a design tool. It shows live previews of web pages from another origin, lets users select elements inside those previews, and renders outlines, a layers panel, and an inspector on top.
 
-**Backend:** `npm run backend` on Node 18+
-**Frontend:** `npm run dev` from `frontend/`
-**One command:** `npm start` (runs both)
+**One command:** `npm run dev` — starts the backend and the frontend together.
 
 Open `http://localhost:3000`.
+
+**Requires Node 18 or newer.**
+
+---
+
+## Running
+
+```bash
+# Install backend dependencies at the repo root
+npm install
+
+# Install frontend dependencies
+cd frontend && npm install && cd ..
+
+# Start everything
+npm run dev
+```
 
 ---
 
