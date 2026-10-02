@@ -31,7 +31,7 @@ The host (`localhost:3000`) and the previewed pages (`localhost:4001`) are diffe
 
 Two pieces:
 
-- **The bridge** (`backend/pages/figr-bridge.js`) — a script injected into every preview page via one `<script>` tag. It owns element identity, hit testing, geometry, and DOM observation inside the page.
+- **The bridge** (`backend/pages/bridge.js`) — a script injected into every preview page via one `<script>` tag. It owns element identity, hit testing, geometry, and DOM observation inside the page.
 - **The host** (`frontend/src/`) — React + Zustand. It renders the board, draws overlays in its own DOM, and drives the layers panel and inspector.
 
 The bridge is served from the page origin (`:4001`), so the injection is same-origin with the page.
@@ -143,7 +143,7 @@ Cases the current build gets wrong or can't handle:
 
 ## Ambiguities I had to decide
 
-- **One `<script>` tag per page.** The brief allows "one `<script>` tag" but doesn't say whether it must be inline or can be a `src`. I used a `src` pointing at a file served by the same origin as the pages (`backend/pages/figr-bridge.js`), which is a single tag per page and keeps the pages byte-identical except for that tag.
+- **One `<script>` tag per page.** The brief allows "one `<script>` tag" but doesn't say whether it must be inline or can be a `src`. I used a `src` pointing at a file served by the same origin as the pages (`backend/pages/bridge.js`), which is a single tag per page and keeps the pages byte-identical except for that tag.
 
 - **"Clicks never reach the page" in Select mode.** I block `pointerdown`, `click`, `submit`, and `focus` in capture phase. This stops links from navigating, buttons from firing, inputs from focusing, and forms from submitting. Tab order inside the page is not blocked — pressing Tab while the iframe has focus still moves focus inside the iframe. The bridge forwards the Tab key to the host as a shortcut, so the host's selection logic runs; the browser's own focus movement is prevented with `preventDefault()`, but this only works because the bridge's `keydown` listener is in capture phase.
 
@@ -167,20 +167,6 @@ Regions:
 - `inspector` — a render error inside the Inspector.
 
 A retry that fails again is a new failure and gets a new report. A request that was cancelled or replaced because the user moved on is not reported.
-
----
-
-## Running
-
-```bash
-npm install
-cd frontend && npm install && cd ..
-npm start
-```
-
-`npm start` runs `dev.js`, which spawns the backend (`node backend/server.js`) and the frontend (`npm run dev` inside `frontend/`) and pipes their output.
-
----
 
 ## Development
 
